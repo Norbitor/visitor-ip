@@ -1,16 +1,19 @@
-FROM python:3.11
+FROM python:3.11-alpine
 
-# Set the working directory to /app
-WORKDIR /app
+# Set project directory
+ENV PROJECT_DIR=/app
 
-# Basic environment setup
-RUN pip install --upgrade pip
-RUN pip install Flask
+WORKDIR ${PROJECT_DIR}
 
-# Copy the current directory contents into the container at /app
-COPY ./src /app
+# Install dependencies
+COPY requirements.txt ${PROJECT_DIR}
+RUN pip install -r requirements.txt
+RUN pip install gunicorn
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
+# Copy source code
+COPY ./src ${PROJECT_DIR}
 
-CMD [ "python", "app.py" ]
+EXPOSE 8000
+
+# Execute gunicorn with 4 workers
+CMD ["gunicorn", "app:app", "-w", "4", "-b", "0.0.0.0:8000"]
