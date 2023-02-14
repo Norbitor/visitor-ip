@@ -15,5 +15,5 @@ COPY ./src ${PROJECT_DIR}
 
 EXPOSE 8000
 
-# Execute gunicorn with 4 workers
-CMD ["gunicorn", "app:app", "-w", "4", "-b", "0.0.0.0:8000"]
+# Execute gunicorn
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8000"]

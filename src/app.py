@@ -2,6 +2,8 @@ from flask import Flask, Response, jsonify, request
 
 app = Flask(__name__)
 
+past_ips = set()
+
 @app.route("/")
 def caller_ip():
     '''
@@ -10,6 +12,7 @@ def caller_ip():
     returns the IP address in plain text.
     '''
     ip = request.remote_addr
+    past_ips.add(ip)
     accept_header = request.accept_mimetypes.best_match(['application/json', 'application/xml', 'text/html', 'text/plain'])
     if accept_header == 'application/json':
         return jsonify({'ip': ip})
@@ -22,4 +25,5 @@ def caller_ip():
 
 @app.route("/history")
 def history():
-    return "<p>History</p>"
+    return jsonify(list(past_ips))
+
