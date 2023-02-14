@@ -1,10 +1,18 @@
 from flask import Flask, Response, jsonify, request
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    storage_uri='memory://',
+)
 
 past_ips = set()
 
 @app.route("/")
+@limiter.limit("1/second")
 def caller_ip():
     '''
     Returns the caller's IP address in the format specified by user in
@@ -24,6 +32,7 @@ def caller_ip():
         return Response(ip, mimetype='text/plain')
 
 @app.route("/history")
+@limiter.limit("10/minute")
 def history():
     return jsonify(list(past_ips))
 
