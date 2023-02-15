@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visitor-ip
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: visitor-ip
+  template:
+    metadata:
+      labels:
+        app: visitor-ip
+    spec:
+      containers:
+      - name: visitor-ip
+        image: localhost:5001/visitorip:latest
+        ports:
+        - containerPort: 8000
