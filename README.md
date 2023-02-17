@@ -80,3 +80,8 @@ testing program, like Postman or Insomnia.
 kubectl get node -o wide # Here you have INTERNAL-IP of your node
 kubectl get services # Find your service and port after 80: for it
 ```
+
+## To be done
+
+1. Expose real IP to the app
+1. Common storage to allow horizontal scaling with data consistency
